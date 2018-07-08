@@ -27,11 +27,10 @@ class BlankPage extends React.Component<Props, State> {
 
 
 
-				<Content padder>
+				<Content>
 					{this.props.orderForm}
-					<Text>{param !== undefined ? param.name.item : "Adding order! . . ."}</Text>
 
-					<View>
+					<View padder>
 						<Button primary block onPress={() => {}}>
 							<Text>Done!</Text>
 						</Button>
