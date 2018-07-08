@@ -177,10 +177,10 @@ export default class MapLocationContainer extends React.Component<Props, State> 
           followsUserLocation={false}
           loadingEnabled={true}
           userLocationAnnotationTitle=""
-          // onPress={this.onUserPress}
-          onPress={event =>
-            this.onUserPress(event.nativeEvent.coordinate)
-          }
+
+          onPress={event => this.onUserPress(event.nativeEvent.coordinate)}
+          onLongPress={event => this.onUserPress(event.nativeEvent.coordinate)}
+
           isDragging={false}
           >
 					<MapView.Marker

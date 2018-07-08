@@ -11,6 +11,11 @@ import NewOrder from "./container/NewOrderContainer";
 import MapLocation from "./container/MapLocationContainer";
 
 
+import { translate } from 'react-i18next';
+import i18n from './i18n';
+
+
+
 const Drawer = DrawerNavigator(
 	{
 		Home: { screen: Home },
@@ -21,7 +26,7 @@ const Drawer = DrawerNavigator(
 	}
 );
 
-const App = StackNavigator(
+const Stack = StackNavigator(
 	{
 		Login: { screen: Login },
 		NewOrder: { screen: NewOrder },
@@ -35,8 +40,21 @@ const App = StackNavigator(
 	}
 );
 
-export default () => (
-	<Root>
-		<App />
-	</Root>
-);
+// The entry point using a react navigation stack navigation
+// gets wrapped by the I18nextProvider enabling using translations
+// https://github.com/i18next/react-i18next#i18nextprovider
+class App extends React.Component {
+  render() {
+		const { t } = this.props
+
+    return (
+				<Root>
+					<Stack screenProps={{ t }}/>
+				</Root>
+		)
+  }
+}
+export default translate('common', {
+  bindI18n: 'languageChanged',
+  bindStore: false
+})(App);
