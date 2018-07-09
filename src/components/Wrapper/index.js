@@ -11,8 +11,8 @@ export interface Props {
 export interface State {}
 class WrapperComponent extends React.Component<Props, State> {
 	render() {
-		const {name} = this.props
-		const param = this.props.navigation.state.params;
+		// const {name} = this.props
+		// const param = this.props.navigation.state.params;
 
 		return (
 			<Container style={styles.container}>
@@ -24,7 +24,7 @@ class WrapperComponent extends React.Component<Props, State> {
 					</Left>
 
 					<Body style={{ flex: 3 }}>
-						<Title>{param ? param.name.item : name}</Title>
+						<Title>{this.props.name}</Title>
 					</Body>
 
 					<Right />

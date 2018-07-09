@@ -12,6 +12,11 @@ import MapLocation from "./container/MapLocationContainer";
 
 import NotificationsScreen from './stories/screens/NotificationsScreen/'
 
+import CatalogContainer from './container2/CatalogContainer/'
+import DetailsContainer from './container2/DetailsContainer/'
+import GalleryContainer from './stories/tbook/Gallery/'
+
+
 import { translate } from 'react-i18next';
 import i18n from './i18n';
 
@@ -34,9 +39,14 @@ const Stack = StackNavigator(
 		BlankPage: { screen: BlankPage },
 		Drawer: { screen: Drawer },
 		NotificationsScreen: { screen: NotificationsScreen },
+
+		CatalogContainer: { screen: CatalogContainer },
+		DetailsContainer: { screen: DetailsContainer },
+		GalleryContainer: { screen: GalleryContainer },
+
 	},
 	{
-		initialRouteName: "NewOrder",
+		initialRouteName: "CatalogContainer",
 		headerMode: "none",
 	}
 );
