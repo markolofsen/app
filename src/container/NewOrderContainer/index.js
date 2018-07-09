@@ -8,7 +8,6 @@ import { Item, Input, Icon, Button, Form, View, Text} from "native-base";
 // import InputEmulator from '../../../components/Form/InputEmulator';
 
 import DateTimePicker from './DateTimePicker/';
-import MapPicker from './MapPicker/';
 
 import { translate } from 'react-i18next';
 
@@ -42,7 +41,6 @@ class NewOrderContainer extends React.Component<Props, State> {
 	render() {
 		const { t, i18n } = this.props;
 
-
 		const Fields = (
 			<Form>
 
@@ -50,12 +48,18 @@ class NewOrderContainer extends React.Component<Props, State> {
 
 				<Item error={false}>
 					<Icon active name="place" />
-					<MapPicker {...this.props} />
+					<Button transparent
+	          onPress={() => this.props.navigation.navigate('MapLocation', {...this.props.param, PageTitle: 'From'})}>
+	          <Text style={styles.textInput}>From</Text>
+	        </Button>
 				</Item>
 
 				<Item error={false}>
 					<Icon active name="place" />
-					<MapPicker {...this.props} />
+					<Button transparent
+	          onPress={() => this.props.navigation.navigate('MapLocation', {...this.props.param, PageTitle: 'To'})}>
+	          <Text style={styles.textInput}>To</Text>
+	        </Button>
 				</Item>
 
 

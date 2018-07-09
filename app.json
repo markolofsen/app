@@ -15,6 +15,7 @@
     "androidStatusBar": {
       "barStyle": "light-content",
       "backgroundColor": "#334393"
-    }
-  }
+    },
+    "facebookScheme": "fb123456"
+  },
 }

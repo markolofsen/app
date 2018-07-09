@@ -1,33 +1,24 @@
 import * as React from "react";
 import { Container, Header, Title, Content, Text, Button, Icon, Left, Right, Body, View } from "native-base";
 
+
+import Wrapper from '../../../components/Wrapper/';
+
 import styles from "./styles";
 export interface Props {
 	navigation: any;
 }
 export interface State {}
-class BlankPage extends React.Component<Props, State> {
+class NewOrderPage extends React.Component<Props, State> {
 	render() {
-		const param = this.props.navigation.state.params;
+		// const param = this.props.navigation.state.params;
 		return (
-			<Container style={styles.container}>
-				<Header>
-					<Left>
-						<Button transparent onPress={() => this.props.navigation.goBack()}>
-							<Icon name="chevron-left" />
-						</Button>
-					</Left>
+			<Wrapper
+				name="New order"
+				{...this.props}
+				>
 
-					<Body style={{ flex: 3 }}>
-						<Title>{param ? param.name.item : "New order"}</Title>
-					</Body>
-
-					<Right />
-				</Header>
-
-
-
-				<Content>
+				<View>
 					{this.props.orderForm}
 
 					<View padder>
@@ -36,10 +27,11 @@ class BlankPage extends React.Component<Props, State> {
 						</Button>
 					</View>
 
-				</Content>
-			</Container>
+				</View>
+
+			</Wrapper>
 		);
 	}
 }
 
-export default BlankPage;
+export default NewOrderPage;

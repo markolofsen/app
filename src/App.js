@@ -10,10 +10,10 @@ import Sidebar from "./container/SidebarContainer";
 import NewOrder from "./container/NewOrderContainer";
 import MapLocation from "./container/MapLocationContainer";
 
+import NotificationsScreen from './stories/screens/NotificationsScreen/'
 
 import { translate } from 'react-i18next';
 import i18n from './i18n';
-
 
 
 const Drawer = DrawerNavigator(
@@ -33,6 +33,7 @@ const Stack = StackNavigator(
 		MapLocation: { screen: MapLocation },
 		BlankPage: { screen: BlankPage },
 		Drawer: { screen: Drawer },
+		NotificationsScreen: { screen: NotificationsScreen },
 	},
 	{
 		initialRouteName: "NewOrder",
@@ -43,13 +44,14 @@ const Stack = StackNavigator(
 // The entry point using a react navigation stack navigation
 // gets wrapped by the I18nextProvider enabling using translations
 // https://github.com/i18next/react-i18next#i18nextprovider
-class App extends React.Component {
+class App extends React.Component<Props> {
+
   render() {
 		const { t } = this.props
 
     return (
 				<Root>
-					<Stack screenProps={{ t }}/>
+					<Stack screenProps={{ t }} />
 				</Root>
 		)
   }

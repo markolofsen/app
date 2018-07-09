@@ -1,13 +1,15 @@
 // @flow
 import * as React from "react";
+import PropTypes from 'prop-types';
 import MapLocation from "../../stories/screens/MapLocation";
 
-import { Item, Input, Icon, Form, Toast } from "native-base";
 import { observer, inject } from "mobx-react/native";
 
-import { Text, View, Button, StatusBar, StyleSheet } from 'react-native';
-import { Constants, MapView, Location, Permissions } from 'expo';
-import { StackNavigator, NavigationActions } from 'react-navigation'; // Version can be specified in package.json
+import { StatusBar, } from 'react-native';
+import { Text, View, Button, Item, Input, Icon, Form, Toast } from 'native-base';
+import { MapView, Location, Permissions } from 'expo';
+
+import styles from "./styles";
 
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
@@ -46,6 +48,9 @@ export interface Props {
 	navigation: any,
 }
 export interface State {}
+
+@inject("loginForm")
+@observer
 export default class MapLocationContainer extends React.Component<Props, State> {
 
 	constructor(props) {
@@ -73,7 +78,7 @@ export default class MapLocationContainer extends React.Component<Props, State> 
       this.onUserPinDragEnd = this.onUserPinDragEnd.bind(this)
 	  }
 
-  componentWillMount() {
+  componentDidMount() {
     Location.watchPositionAsync(GEOLOCATION_OPTIONS, this.locationChanged);
   }
 
@@ -93,6 +98,11 @@ export default class MapLocationContainer extends React.Component<Props, State> 
 		 });
 
 	 }
+
+   apply() {
+     this.refreshAddress()
+     alert('Refreshed!')
+   }
 
 	 async componentDidMount() {
 		 await this.refreshAddress();
@@ -150,12 +160,21 @@ export default class MapLocationContainer extends React.Component<Props, State> 
 
   }
 
+  getAddress() {
+    alert('yyy!()')
+  }
 
 	render() {
 		// const form = this.props.loginForm;
+		// const {mapType} = this.props
+		//
+		const {addressData} = this.state
+
+    const form = this.props.loginForm;
 
 		const Fields = (
 			<View>
+        <Text>{form.AGA}</Text>
 				<MapView
 	        style={{ flex: 1, width: '100%', height: 300 }}
 
@@ -193,55 +212,17 @@ export default class MapLocationContainer extends React.Component<Props, State> 
 						/>
         </MapView>
 
-				<Expo.MapView
-          style={{ flex: 0.5 }}
-          showsUserLocation={true}
-          region={this.state.region}
-        />
 
-				<Button
-          title="Home Refresh"
-          onPress={this.refreshAddress}
-          style={{ marginBottom: 10 }} />
         <Text>
-          {this.state.address}
+          {addressData.name}
+        </Text>
+        <Text>
+          {addressData.city}{addressData.city && ','} {addressData.country}
         </Text>
 
-				<Text>1</Text>
-				<Form>
-					<Item error={false}>
-						<Icon active name="place" />
-						<Input
-							placeholder="!"
-							keyboardType="email-address"
-							ref={c => (this.emailInput = c)}
-							value={this.state.value}
-							onBlur={() => {}}
-							onChangeText={(e) => { this.handleInput(e) }}
-						/>
-					</Item>
-				</Form>
 			</View>
 		);
 
-		return <MapLocation navigation={this.props.navigation} orderForm={Fields} />;
+		return <MapLocation navigation={this.props.navigation} orderForm={Fields} getAddress={this.getAddress} onApply={() => {this.apply()}} />;
 	}
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
-  },
-});

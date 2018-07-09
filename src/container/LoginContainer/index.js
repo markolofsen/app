@@ -24,7 +24,7 @@ export default class LoginContainer extends React.Component<Props, State> {
 		// if (this.props.loginForm.isValid) {
 		if(true) {
 			this.props.loginForm.clearStore();
-			this.props.navigation.navigate("Drawer");
+			this.props.navigation.navigate("NewOrder");
 		} else {
 			Toast.show({
 				text: "Enter Valid Email & password!",
@@ -49,11 +49,8 @@ export default class LoginContainer extends React.Component<Props, State> {
 						onChangeText={e => form.emailOnChange(e)}
 					/>
 				</Item>
-				<View>
-					<Text>Cool?</Text>
-				</View>
 				<Item error={form.passwordError ? true : false}>
-					<Icon active name="unlock" />
+					<Icon active name="person" />
 					<Input
 						placeholder="Password"
 						ref={c => (this.pwdinput = c)}

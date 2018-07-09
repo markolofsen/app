@@ -13,13 +13,14 @@ const languageDetector = {
   detect: (cb) => {
     return Expo.Util.getCurrentLocaleAsync()
       .then(lng => {
-        // cb('de')
-        cb(lng.split('-')[0]);
+        cb('ru')
+        // cb(lng.substr(0,2));
       })
   },
   init: () => {},
   cacheUserLanguage: () => {}
 }
+
 
 i18n
   .use(languageDetector)
@@ -38,6 +39,35 @@ i18n
           introduction: 'This text on page two.'
         },
         common: {
+          "Order": "Order",
+          "Account": "Account",
+          "History": "History",
+          "Support": "Support",
+
+          currentLanguage: 'The current language is "{{lng}}"',
+          actions: {
+            toggleToGerman: 'Deutsch',
+            toggleToEnglish: 'English',
+            goToPage2: 'Open page 2'
+          },
+          infoText: "<0><0>Eins </O><1>Zwei </1><2>Drei </2><3>Vier </3><4>Fünf</4></O>"
+        }
+      },
+      ru: {
+        home: {
+          title: 'Welcome',
+          introduction: 'This text comes from i18next and is provided in english.'
+        },
+        page2: {
+          title: 'Page 2',
+          introduction: 'This text on page two.'
+        },
+        common: {
+          "Order": "Заказ",
+          "Account": "Аккаунт",
+          "History": "История",
+          "Support": "Помощь",
+
           currentLanguage: 'The current language is "{{lng}}"',
           actions: {
             toggleToGerman: 'Deutsch',

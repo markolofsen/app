@@ -3,12 +3,15 @@ import { Container, Header, Title, Content, Text, Button, Icon, Left, Right, Bod
 
 import styles from "./styles";
 export interface Props {
-	navigation: any;
+	navigation: any,
+	onApply: Function,
 }
 export interface State {}
 class BlankPage extends React.Component<Props, State> {
 	render() {
 		const param = this.props.navigation.state.params;
+		// const TEST = this.props.navigation.props.TEST
+		// console.log(this.props.navigation)
 		return (
 			<Container style={styles.container}>
 				<Header>
@@ -19,16 +22,30 @@ class BlankPage extends React.Component<Props, State> {
 					</Left>
 
 					<Body style={{ flex: 3 }}>
-						<Title>{param ? param.name.item : "New order"}</Title>
+						<Title>{param.PageTitle}</Title>
 					</Body>
 
-					<Right />
+					<Right>
+						<Button transparent onPress={() => {this.props.onApply()}}>
+							<Icon name="refresh" />
+						</Button>
+					</Right>
 				</Header>
 
 				<Content padder>
 					{this.props.orderForm}
-					<Text>{param !== undefined ? param.name.item : "Adding order! . . ."}</Text>
+
+					<Button
+	          block primary
+	          onPress={() => { this.props.getAddress(), this.props.navigation.goBack() }}
+	          style={{ marginBottom: 10 }}>
+	          <Text>
+	            Done!
+	          </Text>
+	        </Button>
+
 				</Content>
+
 			</Container>
 		);
 	}
