@@ -6,7 +6,6 @@ class LoginStore {
   @observable isValid = false;
   @observable emailError = "";
   @observable passwordError = "";
-  @observable AGA = "AGA!";
 
   @action
   emailOnChange(id) {

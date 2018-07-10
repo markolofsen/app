@@ -14,7 +14,7 @@ class Catalog extends React.Component<Props, State> {
 		// const param = this.props.navigation.state.params;
 		return (
 			<Wrapper
-				name="Catalog"
+				name={this.props.PageTitle}
 				{...this.props}
 				>
 

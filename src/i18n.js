@@ -34,6 +34,11 @@ i18n
           title: 'Welcome',
           introduction: 'This text comes from i18next and is provided in english.'
         },
+        postfixes: {
+          review_one: 'отзыв',
+          review_three: 'отзыва',
+          review_ten: 'отзывов',
+        },
         page2: {
           title: 'Page 2',
           introduction: 'This text on page two.'
@@ -57,6 +62,11 @@ i18n
         home: {
           title: 'Welcome',
           introduction: 'This text comes from i18next and is provided in english.'
+        },
+        postfixes: {
+          review_one: 'отзыв',
+          review_three: 'отзыва',
+          review_ten: 'отзывов',
         },
         page2: {
           title: 'Page 2',

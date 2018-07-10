@@ -10,8 +10,17 @@ export async function get(path) {
 	return await axios.get(`${apiDomain}${path}`).then(res => res.data)
 }
 
-
-
+import {Linking} from 'react-native';
+export function handleClick(url) {
+  Linking.canOpenURL(url).then(supported => {
+    if (supported) {
+      Linking.openURL(url);
+    } else {
+			alert('Error')
+      console.log("Don't know how to open URI: " + url);
+    }
+  });
+};
 
 // Token for API Authorization
 let GLOBAL_RESPONSE_STATUS = true

@@ -2,12 +2,21 @@
 import * as React from "react";
 import Details from "../../stories/tbook/Details/";
 
-import { View, Text } from 'native-base';
+
+import { Button, View, Text, Icon } from 'native-base';
 import {Image, TouchableOpacity} from 'react-native';
+import Preloader from '../../components/Preloader/'
+import ReadMore from '../../components/ReadMore/'
+import YoutubePlayer from '../../components/YoutubePlayer/'
+import Tickets from './Tickets/'
+import ReviewsBlock from '../ReviewsContainer/ReviewsBlock'
+
 
 import { translate } from 'react-i18next';
 import {get} from '../../utils/api'
+
 import styles from "./styles";
+import __, {tags, customTags} from '../../theme/__'
 
 
 export interface Props {
@@ -22,6 +31,8 @@ export default class DetailsContainer extends React.Component<Props, State> {
 		data: null,
 		meta: null,
 		reviews: null,
+
+		videoToggler: false,
 	}
 
 	componentDidMount() {
@@ -36,17 +47,14 @@ export default class DetailsContainer extends React.Component<Props, State> {
 		console.log(`/api/catalog/tickets/detail/${params.slug}/0/?lang=${this.props.i18n.language}`)
 	}
 
-	preRender() {
-		const params = this.props.navigation.state.params
-		const {data} = this.state
-
-		if(!data) {
-			return (
-				<View>
-					<Text>Loading</Text>
-				</View>
-			)
+	imageVideoToggler = (s) => {
+		this.setState({videoToggler: s})
+		if(!s) {
+			this.openGallery()
 		}
+	}
+	openGallery = () => {
+		const {data} = this.state
 
 		let images_arr = []
 		data.images.map((item, index) => {
@@ -54,53 +62,111 @@ export default class DetailsContainer extends React.Component<Props, State> {
 			images_arr.push({source: { uri: 'http://i.imgur.com/XP2BE7q.jpg' }})
 		})
 
+		this.props.navigation.navigate('GalleryContainer', {
+			navigation: this.props.navigation,
+			imagesArr: images_arr,
+			PageTitle: data.title,
+		})
+	}
+
+	preRender() {
+		const params = this.props.navigation.state.params
+		const {data, videoToggler} = this.state
+
+		if(!data) {
+			return (
+				<View>
+					<Preloader />
+				</View>
+			)
+		}
+
 		return (
 			<View>
 
-				<TouchableOpacity
-					onPress={() => this.props.navigation.navigate('GalleryContainer', {
-						navigation: this.props.navigation,
-						imagesArr: images_arr,
-						PageTitle: data.title,
-					})} >
+				<View style={videoToggler ? styles.imageWrapperON : styles.imageWrapper}>
 
-					<Image
-					 style={styles.image}
-					 source={{ uri: 'https://paragliding4.me/images/pic/paraplan-na-vzlete-advance_1024.jpg' }} />
+					<View style={styles.imageButtons}>
+						{data.video_id &&
+						<Button small light
+							style={styles.imageButtonsBtn}
+							onPress={() => this.imageVideoToggler(true)}>
+							<Text>Play video</Text>
+						</Button>}
+						<Button small light
+							style={styles.imageButtonsBtn}
+							onPress={() => this.imageVideoToggler(false)}>
+							<Text>Photos</Text>
+						</Button>
+					</View>
 
-				</TouchableOpacity>
-
-
-
-				<Text>{data.title}</Text>
-				<Text>{data.location.city}</Text>
-				<Text>{data.description_short}</Text>
-				<Text>{data.video}</Text>
-				<Text>{data.image_preview}</Text>
-				<Text>{data.bestprice.price}</Text>
-
-
-				{data.categories.map((item, index) => {
-					return (
-						<View key={index}>
-							<Text>{item.name}</Text>
+					{videoToggler && data.video_id ?
+						<View style={styles.imageTouch}>
+							<YoutubePlayer id={data.video_id} />
 						</View>
-					)
-				})}
-				{data.prices.map((item, index) => {
-					return (
-						<View key={index}>
-							<Text>{item.title}</Text>
+						:
+						<TouchableOpacity
+							style={styles.imageTouch}
+							onPress={this.openGallery}>
+
+							<Image
+							 style={styles.image}
+							 source={{ uri: 'http://i.imgur.com/XP2BE7q.jpg' }} />
+
+						</TouchableOpacity>}
+
+
+				</View>
+
+				<View padder style={styles.categoryWrapper}>
+					{data.categories.map((item, index) => {
+						return (
+							<View key={index}>
+								<Button rounded bordered info small style={styles.categoryBtn}>
+									<Text>{item.name}</Text>
+								</Button>
+							</View>
+						)
+					})}
+				</View>
+
+
+				<View padder>
+					<Text style={tags.h3}>{data.title}</Text>
+					<View style={styles.subtitle}>
+						<View style={styles.subtitleLocation}>
+							<Icon name="place" style={tags.icon} />
+							<Text>{data.location.city}</Text>
 						</View>
-					)
-				})}
-				{data.reviews.data.map((item, index) => {
-					return (
-						<View key={index}>
-							<Text>{item.title}</Text>
+
+						<View style={styles.subtitlePrice}>
+							<Text style={customTags.price}>
+								From {data.bestprice.price} €
+							</Text>
 						</View>
-					)
-				})}
+					</View>
+
+					<ReadMore text={data.description_plain} />
+
+
+				</View>
+
+				<View padder>
+					<Text style={tags.h3}>Tickets</Text>
+				</View>
+				<Tickets navigation={this.props.navigation} data={data.prices} ticketTitle={data.title} />
+
+
+
+				<View padder>
+					<Text style={tags.h3}>Reviews</Text>
+					<View style={{
+						marginTop: 30,
+					}}>
+						<ReviewsBlock data={data.reviews.data} />
+					</View>
+				</View>
+
 
 			</View>
 		)

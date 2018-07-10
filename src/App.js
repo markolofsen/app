@@ -14,6 +14,8 @@ import NotificationsScreen from './stories/screens/NotificationsScreen/'
 
 import CatalogContainer from './container2/CatalogContainer/'
 import DetailsContainer from './container2/DetailsContainer/'
+import DetailsTicket from './stories/tbook/DetailsTicket/'
+
 import GalleryContainer from './stories/tbook/Gallery/'
 
 
@@ -23,10 +25,11 @@ import i18n from './i18n';
 
 const Drawer = DrawerNavigator(
 	{
-		Home: { screen: Home },
+		// Home: { screen: Home },
+		CatalogContainer: { screen: CatalogContainer },
 	},
 	{
-		initialRouteName: "Home",
+		initialRouteName: "CatalogContainer",
 		contentComponent: props => <Sidebar {...props} />,
 	}
 );
@@ -37,11 +40,12 @@ const Stack = StackNavigator(
 		NewOrder: { screen: NewOrder },
 		MapLocation: { screen: MapLocation },
 		BlankPage: { screen: BlankPage },
-		Drawer: { screen: Drawer },
+		DrawerOpen: { screen: Drawer },
 		NotificationsScreen: { screen: NotificationsScreen },
 
 		CatalogContainer: { screen: CatalogContainer },
 		DetailsContainer: { screen: DetailsContainer },
+		DetailsTicket: { screen: DetailsTicket },
 		GalleryContainer: { screen: GalleryContainer },
 
 	},

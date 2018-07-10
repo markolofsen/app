@@ -11,17 +11,26 @@ export interface Props {
 export interface State {}
 class WrapperComponent extends React.Component<Props, State> {
 	render() {
-		// const {name} = this.props
-		// const param = this.props.navigation.state.params;
+		const {routeName} = this.props.navigation.state
 
 		return (
 			<Container style={styles.container}>
 				<Header>
 					<Left>
-						<Button transparent onPress={() => this.props.navigation.goBack()}>
-							<Icon name="chevron-left" />
-						</Button>
+						{routeName == 'CatalogContainer' ?
+							<Button transparent>
+	              <Icon
+	                active
+	                name="menu"
+	                onPress={() => this.props.navigation.navigate("DrawerOpen", {...this.props})}
+	              />
+	            </Button>
+						:
+							<Button transparent onPress={() => this.props.navigation.goBack()}>
+								<Icon name="chevron-left" />
+							</Button>}
 					</Left>
+
 
 					<Body style={{ flex: 3 }}>
 						<Title>{this.props.name}</Title>

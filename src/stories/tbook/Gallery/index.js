@@ -1,9 +1,6 @@
 import * as React from "react";
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Right, Body } from "native-base";
+import { Container, Header, Title, Content, Text, View, Button, Icon, Left, Right, Body } from "native-base";
 
-
-import { Constants } from 'expo';
-import Dimensions from 'Dimensions';
 
 import Gallery from 'react-native-image-gallery';
 import styles from "./styles";
@@ -19,8 +16,6 @@ class GalleryPage extends React.Component<Props, State> {
 		const param = this.props.navigation.state.params;
 		// const TEST = this.props.navigation.props.TEST
 		// console.log(this.props.navigation)
-
-		const {width, height} = Dimensions.get('window');
 
 		return (
 			<Container style={styles.container}>
@@ -39,17 +34,15 @@ class GalleryPage extends React.Component<Props, State> {
 				</Header>
 
 				<Content>
-					<Gallery
-			        style={{
-								flex: 1,
-								height: height - Constants.statusBarHeight - 40,
-								backgroundColor: 'black'
-							 }}
-							images={param.imagesArr}
-							flatListProps={{
-								windowSize: 3
-							}}
-			      />
+					<View>
+						<Gallery
+				        style={styles.gallery}
+								images={param.imagesArr}
+								flatListProps={{
+									windowSize: 3
+								}}
+				      />
+					</View>
 				</Content>
 
 			</Container>
