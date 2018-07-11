@@ -12,8 +12,10 @@ export interface State {}
 class WrapperComponent extends React.Component<Props, State> {
 	render() {
 		const {routeName} = this.props.navigation.state
+		const {infiniteScroll, noFooter} = this.props
 
 		return (
+
 			<Container style={styles.container}>
 				<Header>
 					<Left>
@@ -22,7 +24,7 @@ class WrapperComponent extends React.Component<Props, State> {
 	              <Icon
 	                active
 	                name="menu"
-	                onPress={() => this.props.navigation.navigate("DrawerOpen", {...this.props})}
+	                onPress={() => this.props.navigation.navigate("DrawerOpen")}
 	              />
 	            </Button>
 						:
@@ -40,11 +42,16 @@ class WrapperComponent extends React.Component<Props, State> {
 				</Header>
 
 
-				<Content>
-					{this.props.children}
-				</Content>
+				{infiniteScroll ?
+					<View style={noFooter ? styles.infiniteScrollNoFooter : styles.infiniteScroll}>
+						{this.props.children}
+					</View>
+					:
+					<Content>{this.props.children}</Content>
+				}
 
-				<FooterMenu />
+
+				{!noFooter && true==false && <FooterMenu />}
 			</Container>
 		);
 	}

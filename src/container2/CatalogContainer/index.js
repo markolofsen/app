@@ -1,203 +1,224 @@
-// @flow
-import * as React from "react";
-import Catalog from "../../stories/tbook/Catalog/";
+import React, { Component } from 'react';
+import { Button } from 'native-base';
+import { FlatList, ActivityIndicator } from 'react-native';
+import { List, ListItem, SearchBar } from 'react-native-elements'; // 0.18.5
+import Footer from './Footer';
+import '@expo/vector-icons'; // 6.2.2
 
-// const _ = require('lodash');
+import ItemView from './ItemView'
 import {get} from '../../utils/api'
 
 
-import {Image, ListView, ActivityIndicator, TouchableOpacity} from 'react-native';
-
-import {
-	Text,
-	View,
-	Card,
-	CardItem,
-	Thumbnail,
-	Button,
-	Icon,
-	Left,
-	Body,
-	Right
-} from 'native-base';
-
-import RatingBar from '../../components/RatingBar/';
-import CountPostfix from '../../components/CountPostfix/';
-
+import {  AsyncStorage, View, Text } from 'react-native';
 import {translate} from 'react-i18next';
+import { observer, inject } from "mobx-react/native";
 
-import __, {tags, customTags} from '../../theme/__'
+
+import Catalog from "../../stories/tbook/Catalog/";
 import styles from "./styles";
 
-
-
-
-class ItemView extends React.Component {
-  render() {
-    const {data} = this.props
-
-    return (
-      <Card>
-        <CardItem>
-          <Left>
-            <Thumbnail source={{uri: 'http://i.imgur.com/XP2BE7q.jpg'}} />
-            <Body>
-              <Text>{data.title}</Text>
-              <Text note>{data.locations[0]}</Text>
-            </Body>
-          </Left>
-        </CardItem>
-        <CardItem cardBody>
-          <Image source={{uri: 'http://i.imgur.com/XP2BE7q.jpg'}} style={{height: 200, width: null, flex: 1}}/>
-        </CardItem>
-        <CardItem>
-          <Left>
-            <Button transparent>
-              <Icon active name="thumb-up" />
-              <CountPostfix type='reviews' number={data.reviews} />
-            </Button>
-
-						<RatingBar small rating={data.rating} />
-          </Left>
-
-          <Right style={{flexWrap: 'nowrap'}}>
-            <Text style={customTags.price}>
-							From {data.bestprice} €
-						</Text>
-          </Right>
-        </CardItem>
-      </Card>
-    );
-  }
-}
-
-
-
+const _ = require('lodash')
 
 export interface Props {
 	navigation: any,
 }
 export interface State {}
 
+
+@inject("mainStore")
+@observer
 @translate(['home', 'common'], { wait: true })
-export default class CatalogPageContainer extends React.Component<Props, State> {
+class App extends Component<Props, State> {
   constructor(props) {
     super(props);
-    this.fetchMore = this._fetchMore.bind(this);
-    this.fetchData = this._fetchData.bind(this);
+
     this.state = {
-      dataSource: null,
-      isLoading: true,
-      isLoadingMore: false,
-      _data: null,
-      _dataPage: '',
+      loading: false,
+      data: [],
+      page: 1,
+      seed: 1,
+      error: null,
+      refreshing: false,
 
-      meta: false,
+			_pagesTotal: false,
+			_meta: false
     };
+
+		this.makeRemoteRequest = _.debounce(this._makeRemoteRequest.bind(this), 500);
+
   }
 
-  _fetchData(callback) {
+	componentDidMount() {
+		this.makeRemoteRequest();
+
+
+    // AsyncStorage.setItem('aItem', 'Hello world1')
+    // .then(() => {
+    //   AsyncStorage.getItem('aItem', (error, result) => {
+    //     console.warn('callback', result);
+    //     this.setState({ callback: result });
+    //   })
+    //   .then(result => {
+    //     console.warn('promise', result);
+    //     this.setState({ promise: result });
+    //   });
+    // })
+
+		// AsyncStorage.getItem('aItem', (error, result) => {
+		// 	console.warn('callback', result);
+		// 	this.setState({ callback: result });
+		// })
+		// .then(result => {
+		// 	console.warn('promise', result);
+		// 	this.setState({ promise: result });
+		// });
+  }
+
+	// makeRemoteRequest = () => {
+	// 	const { page, seed } = this.state;
+	// 	const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
+	// 	this.setState({ loading: true });
+	//
+	// 	console.log('————————————'+page)
+	//
+	//
+	// 	fetch(url)
+	// 		.then(res => res.json())
+	// 		.then(res => {
+	// 			this.setState({
+	// 				data: page === 1 ? res.results : [...this.state.data, ...res.results],
+	// 				error: res.error || null,
+	// 				loading: false,
+	// 				refreshing: false,
+	// 			});
+	// 		})
+	// 		.catch(error => {
+	// 			this.setState({ error, loading: false });
+	// 		});
+	// };
+	//
+	shouldComponentUpdate(nextProps, nextState) {
+		const nextParams = nextProps.navigation.state.params
+		const params = this.props.navigation.state.params
+
+		if(typeof nextParams !== 'undefined' && typeof params !== 'undefined') {
+			if(nextParams.slug != params.slug) {
+				// alert(nextParams.slug)
+				this.setState({data: []}, () => this.handleRefresh())
+				// this.scroller.scrollTo({x: 0, y: 0});
+			}
+		}
+
+		// if(this.state.isLoadingMore && nextState.isLoadingMore) {
+		// 	console.log('----> UPDATE')
+		// 	return false
+		// }
+		// if(!params && this.state.dataSource != null) {
+		// 	// this.setState({isLoading: true}, () => this.firstLoad())
+		// }
+
+		return true
+	}
+
+  _makeRemoteRequest = () => {
+    const { page, seed } = this.state;
+
+    this.setState({ loading: true });
+
+
+
     const nav = this.props.navigation.state.params
-
-    const params = this.state._dataPage !== ''
-      ? `page=${this.state._dataPage}`
-      : '';
-
     const folder = nav ? nav.slug : 'all'
-    // console.log(this.props.i18n.language)
-    //Limits fetches to 15 so there's lesser items from the get go
-    get(`/api/catalog/tickets/list/${folder}/?${params}&lang=${this.props.i18n.language}`)
-    .then(res => {
-      this.setState({meta: res.meta})
-      return res.results
+    const url = `/api/catalog/tickets/list/${folder}/?page=${page}&lang=${this.props.i18n.language}&seed=${seed}`
 
-    })
-      .then(callback)
-      .catch(error => {
-        console.error(error);
-      });
-  }
+		console.log('————————————'+page)
+		console.log(url)
 
-  _fetchMore() {
+		const {_pagesTotal} = this.state
 
-    return true
+		console.log('_pagesTotal '+_pagesTotal)
+		console.log('page '+page)
+		if(_pagesTotal == false || page <= _pagesTotal) {
+	    get(url).then(res => {
+	      this.setState({
+	        data: page === 1 ? res.results : [...this.state.data, ...res.results],
+	        error: res.error || null,
+	        loading: false,
+	        refreshing: false,
 
-    this.fetchData(res => {
-      const data = this.state._data.concat(res);
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(data),
-        isLoadingMore: false,
-        _data: data,
-        _dataPage: 1,
-      });
-    });
-  }
+					_pagesTotal: res.page.pages,
+					_meta: res.meta,
+	      }, () => {});
+				// console.log(res.meta)
+	    })
+	    .catch(error => {
+	      this.setState({ error, loading: false });
+	    });
+		} else {
+			this.setState({
+				loading: false,
+				refreshing: false,
+			}, () => {})
+		}
+  };
 
-  componentDidMount() {
-    //Start getting the first batch of data from reddit
-    this.fetchData(res => {
-      let ds = new ListView.DataSource({
-        rowHasChanged: (r1, r2) => r1 !== r2,
-      });
-      const data = res;
-      this.setState({
-        dataSource: ds.cloneWithRows(data),
-        isLoading: false,
-        _data: data,
-        _dataPage: 1,
-      });
-    });
-  }
+
+handleRefresh = () => {
+	this.setState({
+		page: 1,
+		seed: this.state.seed + 1,
+		refreshing: true
+	}, () => {
+		this.makeRemoteRequest();
+	});
+};
+
+handleLoadMore = () => {
+	this.setState({
+		page: this.state.page + 1
+	}, () => {
+		this.makeRemoteRequest();
+	});
+};
 
   preRender() {
 
-    const params = this.props.navigation.state.params
+    return (
+			<View style={styles.container}>
 
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          <View padder>
-            <ListView
-              dataSource={this.state.dataSource}
-              renderRow={rowData => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('DetailsContainer', {
-                      navigation: this.props.navigation,
-                      slug: rowData.slug
-                    })} >
+	      <List containerStyle={styles.List}>
+	        <FlatList
+						containerStyle={styles.FlatList}
+	          data={this.state.data}
+	          renderItem={({ item }) => (
+							<ItemView navigation={this.props.navigation} data={item} />
+	          )}
+	          ListFooterComponent={
+	            <Footer isLoading={this.state.loading} />
+	          }
+	          keyExtractor={item => item.slug}
+	          // onRefresh={this.handleRefresh}
+	          refreshing={this.state.refreshing}
+	          onEndReached={this.handleLoadMore}
+	          onEndReachedThreshold={50}
+	        />
+	      </List>
+			</View>
+    );
+	}
 
-                    <ItemView data={rowData} />
 
-                  </TouchableOpacity>
-                );
-              }}
-              onEndReached={() =>
-                this.setState({ isLoadingMore: true }, () => this.fetchMore())}
-              renderFooter={() => {
-                return (
-                  this.state.isLoadingMore &&
-                  <View style={{ flex: 1, padding: 10 }}>
-                    <ActivityIndicator size="small" />
-                  </View>
-                );
-              }}
-            />
-          </View>
-        </View>
-      );
-    }
-  }
+	render() {
+		const {_meta} = this.state
 
-  render() {
-    const {meta} = this.state
-    let PageTitle = meta ? meta.title : 'Catalog'
-    return <Catalog navigation={this.props.navigation} catalogList={this.preRender()} PageTitle={PageTitle} />
-  }
+		return <Catalog
+			navigation={this.props.navigation}
+			catalogList={this.preRender()}
+			PageTitle={_meta ? _meta.title_original : 'Catalog'}
+			infiniteScroll
+			noFooter
+		 />
+	}
 }
+
+export default App;

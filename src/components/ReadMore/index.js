@@ -19,6 +19,10 @@ class ReadMore extends Component {
 		const {open} = this.state
 		const {text} = this.props
 
+		if(text.length < 100) {
+			return <Text>{text}</Text>
+		}
+
 		return (
 			<View>
 

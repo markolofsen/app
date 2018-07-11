@@ -10,14 +10,18 @@ export async function get(path) {
 	return await axios.get(`${apiDomain}${path}`).then(res => res.data)
 }
 
+import i18n from 'i18next';
 import {Linking} from 'react-native';
-export function handleClick(url) {
-  Linking.canOpenURL(url).then(supported => {
+export function handleClick(url, type=false) {
+
+	let url_ = type == 'self' ? `${apiDomain}/${i18n.language}/${url}` : url
+
+  Linking.canOpenURL(url_).then(supported => {
     if (supported) {
-      Linking.openURL(url);
+      Linking.openURL(url_);
     } else {
 			alert('Error')
-      console.log("Don't know how to open URI: " + url);
+      console.log("Don't know how to open URI: " + url_);
     }
   });
 };

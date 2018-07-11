@@ -1,7 +1,9 @@
 import i18n from 'i18next';
 import { reactI18nextModule } from 'react-i18next';
 
+
 import Expo from 'expo';
+import {AsyncStorage} from 'react-native';
 
 
 
@@ -11,15 +13,29 @@ const languageDetector = {
   type: 'languageDetector',
   async: true, // async detection
   detect: (cb) => {
-    return Expo.Util.getCurrentLocaleAsync()
-      .then(lng => {
-        cb('ru')
-        // cb(lng.substr(0,2));
+
+    let applyLng = 'en'
+    AsyncStorage.getItem('userLang', (error, result) => {
+
+      Expo.Util.getCurrentLocaleAsync().then(expoLng => {
+        if(!result) applyLng = expoLng
+        if(result) applyLng = result
+
+        if(['en','ru'].includes(applyLng)) {
+          AsyncStorage.setItem('userLang', applyLng).then(resp => {
+            cb(applyLng)
+          })
+        } else {
+          cb('en')
+        }
+
       })
+    })
   },
   init: () => {},
   cacheUserLanguage: () => {}
 }
+
 
 
 i18n
@@ -35,9 +51,9 @@ i18n
           introduction: 'This text comes from i18next and is provided in english.'
         },
         postfixes: {
-          review_one: 'отзыв',
-          review_three: 'отзыва',
-          review_ten: 'отзывов',
+          review_one: 'review',
+          review_three: 'reviews',
+          review_ten: 'reviews',
         },
         page2: {
           title: 'Page 2',

@@ -8,15 +8,17 @@ import {Image, TouchableOpacity} from 'react-native';
 import Preloader from '../../components/Preloader/'
 import ReadMore from '../../components/ReadMore/'
 import YoutubePlayer from '../../components/YoutubePlayer/'
+import NumberFormat from '../../components/NumberFormat/'
+
 import Tickets from './Tickets/'
 import ReviewsBlock from '../ReviewsContainer/ReviewsBlock'
 
 
 import { translate } from 'react-i18next';
-import {get} from '../../utils/api'
+import {get, handleClick} from '../../utils/api'
 
 import styles from "./styles";
-import __, {tags, customTags} from '../../theme/__'
+import __, {tags, customTags, padding} from '../../theme/__'
 
 
 export interface Props {
@@ -140,24 +142,43 @@ export default class DetailsContainer extends React.Component<Props, State> {
 						</View>
 
 						<View style={styles.subtitlePrice}>
-							<Text style={customTags.price}>
-								From {data.bestprice.price} €
-							</Text>
+							<NumberFormat
+								cssClass={customTags.price}
+								value={data.bestprice.price}
+								prefix='From' postfix='€' />
 						</View>
 					</View>
 
 					<ReadMore text={data.description_plain} />
-
-
 				</View>
 
-				<View padder>
-					<Text style={tags.h3}>Tickets</Text>
+				{data.prices.length > 0 &&
+					<View>
+						<View padder>
+							<Text style={tags.h3}>Tickets</Text>
+						</View>
+						<Tickets
+							navigation={this.props.navigation}
+							data={data.prices}
+							ticketTitle={data.title}
+						 	offerSlug={data.slug} />
+					</View>}
+
+				<View style={{
+					...padding(30, 5, 30, 5)
+				}}>
+					<Button
+						block
+						primary
+						bordered
+						onPress={() => handleClick(`offer/${data.slug}`, 'self')}
+						>
+						<Text>Show at website</Text>
+					</Button>
 				</View>
-				<Tickets navigation={this.props.navigation} data={data.prices} ticketTitle={data.title} />
 
 
-
+				{data.reviews.data.length > 0 &&
 				<View padder>
 					<Text style={tags.h3}>Reviews</Text>
 					<View style={{
@@ -165,7 +186,7 @@ export default class DetailsContainer extends React.Component<Props, State> {
 					}}>
 						<ReviewsBlock data={data.reviews.data} />
 					</View>
-				</View>
+				</View>}
 
 
 			</View>

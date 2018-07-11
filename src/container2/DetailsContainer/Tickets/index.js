@@ -14,7 +14,7 @@ import styles from "./styles";
 class TicketsMenu extends React.Component {
   render() {
 
-    const {data, ticketTitle} = this.props
+    const {data, ticketTitle, offerSlug} = this.props
 
     return (
       <View>
@@ -27,6 +27,7 @@ class TicketsMenu extends React.Component {
                   navigation: this.props.navigation,
                   ticketTitle,
                   data: item,
+                  offerSlug,
                 })} >
                 <Left>
                   <Text>{item.title}</Text>

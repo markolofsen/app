@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 export default {
 	...v,
 	deviceHeightInner: (v.deviceHeight - v.toolbarHeight - v.footerHeight),
+	deviceHeightInnerNoFooter: (v.deviceHeight - v.footerHeight),
 	videoDimensionHeight: (v.deviceWidth / 1.77),
 	fontSizeTiny: v.fontSizeBase * 0.8,
 	sizeIconTiny: v.fontSizeBase * 1.4,
@@ -11,6 +12,22 @@ export default {
 
 
 
+export function padding(top=0, right=false, bottom=false, left=false) {
+	return {
+		paddingTop: top,
+		paddingRight: typeof right == 'number' ? right : top,
+		paddingLeft: typeof left == 'number' ? left : top,
+		paddingBottom: typeof bottom == 'number' ? bottom : top,
+	}
+}
+export function margin(top=0, right=false, bottom=false, left=false) {
+	return {
+		marginTop: top,
+		marginLeft: typeof left == 'number' ? left : top,
+		marginRight: typeof right == 'number' ? right : top,
+		marginBottom: typeof bottom == 'number' ? bottom : top,
+	}
+}
 
 export const css = {
 	shadow2p: {
@@ -24,7 +41,9 @@ export const css = {
 		borderRadius: v.borderRadiusBase,
 		borderStyle: 'solid',
 		borderColor: v.cardBorderColor,
-	}
+	},
+	padding5: padding(5),
+
 }
 
 export const tags: any = StyleSheet.create({
@@ -47,10 +66,10 @@ export const tags: any = StyleSheet.create({
 		height: .5,
 		width: '100%',
 	}
-
 });
 
-export const customTags: any = StyleSheet.create({
+export const customTags = {
+// export const customTags: any = StyleSheet.create({
 	price: {
 		...css.borderStyle,
 		color: v.brandDanger,
@@ -58,4 +77,4 @@ export const customTags: any = StyleSheet.create({
 		fontWeight: 'bold',
 		padding: 5,
 	}
-})
+}

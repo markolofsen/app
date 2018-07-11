@@ -48,11 +48,15 @@ export default class Sidebar extends React.Component<Props, State> {
 
 	render() {
 
+		const {mainStore} = this.props
+
 		const catalogMenu = this.props.mainStore.settings.menu[0].submenu.map(c => c)
 
 		if(!catalogMenu) {
 			return <View />
 		}
+
+		// onPress={() => this.props.navigation.dispatch(resetAction(data.slug)) } >
 
 		return (
 			<Container>
@@ -64,12 +68,15 @@ export default class Sidebar extends React.Component<Props, State> {
 							return (
 								<ListItem
 									button
-									onPress={() => this.props.navigation.dispatch(resetAction(data.slug)) } >
+									onPress={() => this.props.navigation.navigate('CatalogContainer', {
+										slug: data.slug,
+									}) } >
 									<Text>{data.label}</Text>
 								</ListItem>
 							)
 						}} />
 
+					{true == false &&
 					<List
 						style={{ marginTop: 40 }}
 						dataArray={routes}
@@ -85,7 +92,23 @@ export default class Sidebar extends React.Component<Props, State> {
 									<Text>{data.caption}</Text>
 								</ListItem>
 							)
-						}} />
+						}} />}
+
+						<View style={{height: 30}} />
+
+
+						<ListItem
+							button
+							onPress={() => mainStore.changeLang('ru')}>
+							<Text>Russian {mainStore.userLang == 'ru' && '<<'}</Text>
+						</ListItem>
+
+						<ListItem
+							button
+							onPress={() => mainStore.changeLang('en')}>
+							<Text>English {mainStore.userLang == 'en' && '<<'}</Text>
+						</ListItem>
+
 				</Content>
 			</Container>
 		);
