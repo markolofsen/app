@@ -39,19 +39,20 @@ class DetailsTicket extends React.Component<Props, State> {
 				>
 
 				<View padder>
-					<Text style={tags.h1}>{data.title} {param.offerSlug}</Text>
-					<View style={styles.description}>
-						<ReadMore text={data.description_plain} />
-					</View>
+					<Text style={tags.h1}>{data.title}</Text>
+					{data.description_plain.length > 0 &&
+						<View style={styles.description}>
+							<ReadMore text={data.description_plain} />
+						</View>}
 
 					<View style={tags.hr} />
 
-					{data.languages && <View style={styles.listBlock}>
+					{data.languages.length > 0 && <View style={styles.listBlock}>
 						<Text style={styles.listBlockLabel}>Languages:</Text>
 						<Text style={styles.listBlockValue}>{data.languages.join(', ')}</Text>
 					</View>}
 
-					{data.include && <View style={styles.listBlock}>
+					{data.include.length > 0 && <View style={styles.listBlock}>
 						<Text style={styles.listBlockLabel}>Included:</Text>
 						<Text style={styles.listBlockValue}>{data.include.join(', ')}</Text>
 					</View>}

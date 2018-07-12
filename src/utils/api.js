@@ -1,7 +1,10 @@
 // console.log( process.env )
 
 
-export const apiDomain = 'http://127.0.0.1:8000';
+// export const apiDomain = 'http://127.0.0.1:8000';
+export const apiDomain = 'https://tenerifebook.com';
+// export const apiDomain = 'http://192.168.1.128:8000';
+export const webDomain = 'https://tenerifebook.com';
 /*
  * UNIVERSAL FETCHERS
  */
@@ -14,7 +17,7 @@ import i18n from 'i18next';
 import {Linking} from 'react-native';
 export function handleClick(url, type=false) {
 
-	let url_ = type == 'self' ? `${apiDomain}/${i18n.language}/${url}` : url
+	let url_ = type == 'self' ? `${webDomain}/${i18n.language}/${url}` : url
 
   Linking.canOpenURL(url_).then(supported => {
     if (supported) {

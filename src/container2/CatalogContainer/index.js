@@ -50,72 +50,23 @@ class App extends Component<Props, State> {
 
 	componentDidMount() {
 		this.makeRemoteRequest();
-
-
-    // AsyncStorage.setItem('aItem', 'Hello world1')
-    // .then(() => {
-    //   AsyncStorage.getItem('aItem', (error, result) => {
-    //     console.warn('callback', result);
-    //     this.setState({ callback: result });
-    //   })
-    //   .then(result => {
-    //     console.warn('promise', result);
-    //     this.setState({ promise: result });
-    //   });
-    // })
-
-		// AsyncStorage.getItem('aItem', (error, result) => {
-		// 	console.warn('callback', result);
-		// 	this.setState({ callback: result });
-		// })
-		// .then(result => {
-		// 	console.warn('promise', result);
-		// 	this.setState({ promise: result });
-		// });
   }
 
-	// makeRemoteRequest = () => {
-	// 	const { page, seed } = this.state;
-	// 	const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
-	// 	this.setState({ loading: true });
-	//
-	// 	console.log('————————————'+page)
-	//
-	//
-	// 	fetch(url)
-	// 		.then(res => res.json())
-	// 		.then(res => {
-	// 			this.setState({
-	// 				data: page === 1 ? res.results : [...this.state.data, ...res.results],
-	// 				error: res.error || null,
-	// 				loading: false,
-	// 				refreshing: false,
-	// 			});
-	// 		})
-	// 		.catch(error => {
-	// 			this.setState({ error, loading: false });
-	// 		});
-	// };
-	//
 	shouldComponentUpdate(nextProps, nextState) {
 		const nextParams = nextProps.navigation.state.params
 		const params = this.props.navigation.state.params
 
-		if(typeof nextParams !== 'undefined' && typeof params !== 'undefined') {
-			if(nextParams.slug != params.slug) {
-				// alert(nextParams.slug)
+		if(typeof nextParams !== 'undefined') {
+			 if(typeof params !== 'undefined') {
+				if(nextParams.slug != params.slug) {
+					// alert(nextParams.slug)
+					this.setState({data: []}, () => this.handleRefresh())
+					// this.scroller.scrollTo({x: 0, y: 0});
+				}
+			} else {
 				this.setState({data: []}, () => this.handleRefresh())
-				// this.scroller.scrollTo({x: 0, y: 0});
 			}
 		}
-
-		// if(this.state.isLoadingMore && nextState.isLoadingMore) {
-		// 	console.log('----> UPDATE')
-		// 	return false
-		// }
-		// if(!params && this.state.dataSource != null) {
-		// 	// this.setState({isLoading: true}, () => this.firstLoad())
-		// }
 
 		return true
 	}

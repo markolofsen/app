@@ -13,7 +13,6 @@ import NumberFormat from '../../components/NumberFormat/'
 import Tickets from './Tickets/'
 import ReviewsBlock from '../ReviewsContainer/ReviewsBlock'
 
-
 import { translate } from 'react-i18next';
 import {get, handleClick} from '../../utils/api'
 
@@ -60,8 +59,8 @@ export default class DetailsContainer extends React.Component<Props, State> {
 
 		let images_arr = []
 		data.images.map((item, index) => {
-			// images_arr.push({source: { uri: item.normal }})
-			images_arr.push({source: { uri: 'http://i.imgur.com/XP2BE7q.jpg' }})
+			images_arr.push({source: { uri: item.normal }})
+			// images_arr.push({source: { uri: 'http://i.imgur.com/XP2BE7q.jpg' }})
 		})
 
 		this.props.navigation.navigate('GalleryContainer', {
@@ -113,7 +112,7 @@ export default class DetailsContainer extends React.Component<Props, State> {
 
 							<Image
 							 style={styles.image}
-							 source={{ uri: 'http://i.imgur.com/XP2BE7q.jpg' }} />
+							 source={{ uri: data.image_preview }} />
 
 						</TouchableOpacity>}
 

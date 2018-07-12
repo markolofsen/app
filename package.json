@@ -1,5 +1,5 @@
 {
-  "name": "ReactNativeSeed",
+  "name": "TenerifeBook.com",
   "version": "1.1.0",
   "private": true,
   "devDependencies": {
@@ -25,7 +25,8 @@
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
-    "test": "yarn jest && flow && eslint .",
+    "test": "ENV=production",
+    "testok": "yarn jest && flow && eslint .",
     "jest": "node node_modules/jest/bin/jest.js",
     "precommit": "yarn test"
   },

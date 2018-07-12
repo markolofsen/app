@@ -15,7 +15,7 @@ class NumberBlock extends Component {
 		const postfix_ = postfix ? ` ${postfix}` : ''
 		const s = cssClass ? cssClass : ''
 
-		if(!value) return <View />
+		if(typeof value !== 'number') return <View />
 		return (
 			<View>
 				<NumberFormat
@@ -32,7 +32,7 @@ class NumberBlock extends Component {
 	}
 }
 NumberBlock.propTypes = {
-	value: PropTypes.number.isRequired
+	// value: PropTypes.number.isRequired
 };
 
 export default NumberBlock
