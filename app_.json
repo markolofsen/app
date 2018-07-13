@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "sdkVersion": "24.0.0",
+    "slug": "Tenerife",
+    "description": "Things to do in Tenerife",
+
+    "loading": {
+      "hideExponentText": false,
+      "icon": "./assets/loading.png"
+    },
+    "orientation": "portrait",
+    "primaryColor": "#cccccc",
+    "packagerOpts": {
+      "assetExts": ["ttf"]
+    },
+    "androidStatusBarColor": "#334393",
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#334393"
+    },
+    "facebookScheme": "fb123456",
+
+
+    "icon": "./assets/icons/app-icon.png",
+    "android": {
+      "package": "org.sillik.expo.tenerifebook"
+    },
+    "ios": {
+      "bundleIdentifier": "org.sillik.expo.tenerifebook",
+      "supportsTablet": true
+    },
+    "loading": {
+      "backgroundColor": "#FFFFFF",
+      "hideExponentText": false,
+      "icon": "./assets/icons/loading-icon.png",
+      "splash": {
+        "backgroundColor": "#FFFFFF",
+        "image": {
+          "ios": {
+            "backgroundImage": "./assets/images/splash.png"
+          }
+        }
+      }
+    },
+  },
+}

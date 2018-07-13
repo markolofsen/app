@@ -3,12 +3,10 @@
     "sdkVersion": "24.0.0",
     "slug": "Tenerife",
     "description": "Things to do in Tenerife",
-
-    "loading": {
-      "hideExponentText": false,
-      "icon": "./assets/loading.png"
-    },
     "orientation": "portrait",
+    "privacy": "public",
+    "platforms": ["ios", "android"],
+    "version": "1.0.0",
     "primaryColor": "#cccccc",
     "packagerOpts": {
       "assetExts": ["ttf"]
@@ -18,29 +16,21 @@
       "barStyle": "light-content",
       "backgroundColor": "#334393"
     },
-    "facebookScheme": "fb123456",
-
-
-    "icon": "./assets/icons/app-icon.png",
-    "android": {
-      "package": "org.sillik.expo.tenerifebook"
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
+    "icon": "./assets/icons/app-icon.png",
     "ios": {
-      "bundleIdentifier": "org.sillik.expo.tenerifebook",
+      "bundleIdentifier": "com.markolofsen.tenerifebook",
       "supportsTablet": true
     },
-    "loading": {
-      "backgroundColor": "#FFFFFF",
-      "hideExponentText": false,
-      "icon": "./assets/icons/loading-icon.png",
-      "splash": {
-        "backgroundColor": "#FFFFFF",
-        "image": {
-          "ios": {
-            "backgroundImage": "./assets/images/splash.png"
-          }
-        }
-      }
+    "android": {
+      "package": "com.markolofsen.tenerifebook"
     },
-  },
+    "facebookDisplayName": "TenerifeBook.com",
+    "facebookAppId": "1289365384500478",
+    "facebookScheme": "fb1289365384500478",
+  }
 }
